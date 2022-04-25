@@ -14,10 +14,11 @@ export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
 
-  if (!newTaskTitle) return;
-
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+
+    if (!newTaskTitle) return;
+
     let task = {
       id: Math.floor(Math.random() * 50),
       title: newTaskTitle,
@@ -31,34 +32,48 @@ export function TaskList() {
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
 
-    var items = Array.from(tasks);
-    var index = 0;
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id === id) {
-        if (items[i].isComplete) {
-          items[i].isComplete = false;
-        } else {
-          items[i].isComplete = true;
-        }
-        break;
-      }
-    }
-    setTasks(items);
+    const alterTask = tasks.map((task) =>
+      task.id === id
+        ? {
+            ...task,
+            isComplete: !task.isComplete,
+          }
+        : task
+    );
+
+    setTasks(alterTask);
+
+    // var items = Array.from(tasks);
+    // var index = 0;
+    // for (var i = 0; i < items.length; i++) {
+    //   if (items[i].id === id) {
+    //     if (items[i].isComplete) {
+    //       items[i].isComplete = false;
+    //     } else {
+    //       items[i].isComplete = true;
+    //     }
+    //     break;
+    //   }
+    // }
+    // setTasks(items);
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
 
-    var items = Array.from(tasks);
-    var index = 0;
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-    items.splice(index, 1);
-    setTasks(items);
+    const filteredTasks = tasks.filter((task) => task.id !== id);
+    setTasks(filteredTasks);
+
+    // var items = Array.from(tasks);
+    // var index = 0;
+    // for (var i = 0; i < items.length; i++) {
+    //   if (items[i].id === id) {
+    //     index = i;
+    //     break;
+    //   }
+    // }
+    // items.splice(index, 1);
+    // setTasks(items);
   }
 
   return (
